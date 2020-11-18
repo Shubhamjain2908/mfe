@@ -4,8 +4,9 @@ import ReactDOM from 'react-dom';
 import App from './App';
 
 // Mount function to start up the app
-const mount = (el) => {
+const mount = (el, { onNavigate }) => {
   const history = createMemoryHistory();
+  history.listen(onNavigate);
   ReactDOM.render(<App history={history} />, el);
 };
 
@@ -15,7 +16,7 @@ if (process.env.NODE_ENV === 'development') {
   const devRoot = document.querySelector('#_marketing-dev-root');
 
   if (devRoot) {
-    mount(devRoot);
+    mount(devRoot, { onNavigate: () => { console.log('Routing in marketing dev mode') } });
   }
 }
 
