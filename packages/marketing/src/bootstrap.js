@@ -1,12 +1,16 @@
-import { createMemoryHistory } from 'history';
+import { createBrowserHistory, createMemoryHistory } from 'history';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 
 // Mount function to start up the app
-const mount = (el, { onNavigate }) => {
-  const history = createMemoryHistory();
-  history.listen(onNavigate);
+const mount = (el, { onNavigate, defaultHistory }) => {
+  const history = defaultHistory || createMemoryHistory();
+
+  if (onNavigate) {
+    history.listen(onNavigate);
+  }
+
   ReactDOM.render(<App history={history} />, el);
 
   return {
@@ -25,7 +29,7 @@ if (process.env.NODE_ENV === 'development') {
   const devRoot = document.querySelector('#_marketing-dev-root');
 
   if (devRoot) {
-    mount(devRoot, { onNavigate: () => { console.log('Routing in marketing dev mode') } });
+    mount(devRoot, { defaultHistory: createBrowserHistory() });
   }
 }
 
